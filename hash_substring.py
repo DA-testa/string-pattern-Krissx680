@@ -1,32 +1,54 @@
-# python3
+
 
 def read_input():
-    # this function needs to aquire input both from keyboard and file
-    # as before, use capital i (input from keyboard) and capital f (input from file) to choose which input type will follow
     
-    
-    # after input type choice
-    # read two lines 
-    # first line is pattern 
-    # second line is text in which to look for pattern 
-    
-    # return both lines in one return
-    
-    # this is the sample return, notice the rstrip function
-    return (input().rstrip(), input().rstrip())
+    input_type = input().rstrip()
+    if input_type == 'F':
+        while True:
+            filename = input().rstrip()
+            if filename:
+                try:
+                    with open(filename) as f:
+                        return f.readline().rstrip(), f.readline().rstrip()
+                except FileNotFoundError:
+                    print(f"Error: Could not find file '{filename}'")
+                    exit(1)
+            else:
+                print("Error: Empty filename")
+    else:
+        while True:
+            try:
+                text = input().rstrip()
+                if text:
+                    return text, input().rstrip()
+                else:
+                    print("Error: Empty input")
+            except EOFError:
+                print("Error: Empty input")
+                exit(1)
+
 
 def print_occurrences(output):
-    # this function should control output, it doesn't need any return
+
     print(' '.join(map(str, output)))
 
 def get_occurrences(pattern, text):
-    # this function should find the occurances using Rabin Karp alghoritm 
 
-    # and return an iterable variable
-    return [0]
+    
+    p_len, t_len = len(pattern), len(text)
+    p_hash, t_hash = hash(pattern), hash(text[:p_len])
+    occur = []
+    
+    for i in range(t_len - p_len + 1):
+        if p_hash == t_hash and pattern == text[i:i+p_len]:
+            occur.append(i)
+        if i < t_len - p_len:
+            t_hash = hash(text[i+1:i+1+p_len])
+    
+    return occur
 
 
-# this part launches the functions
+
 if __name__ == '__main__':
     print_occurrences(get_occurrences(*read_input()))
 
