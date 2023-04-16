@@ -1,22 +1,32 @@
 
 
 def read_input():
-
+    
     input_type = input().rstrip()
     if input_type == 'F':
-        filename = input().rstrip()
-        try:
-            with open(filename) as f:
-                return f.readline().rstrip(), f.readline().rstrip()
-        except FileNotFoundError:
-            print(f"Error: Could not find file '{filename}'")
-            exit(1)
+        while True:
+            filename = input().rstrip()
+            if filename:
+                try:
+                    with open(filename) as f:
+                        return f.readline().rstrip(), f.readline().rstrip()
+                except FileNotFoundError:
+                    print(f"Error: Could not find file '{filename}'")
+                    exit(1)
+            else:
+                print("Error: Empty filename")
     else:
-        try:
-            return input().rstrip(), input().rstrip()
-        except EOFError:
-            print("Error: Empty input")
-            exit(1)
+        while True:
+            try:
+                text = input().rstrip()
+                if text:
+                    return text, input().rstrip()
+                else:
+                    print("Error: Empty input")
+            except EOFError:
+                print("Error: Empty input")
+                exit(1)
+
 
 def print_occurrences(output):
 
